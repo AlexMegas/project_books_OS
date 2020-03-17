@@ -69,8 +69,7 @@ exports.getBookByAuthor = (req, res) => {
 
 exports.updateBookById = (req, res) => {
     const bookId = req.params.id;
-    console.log(bookId);
-    book.findByIdAndUpdate(bookId, reg.body(), () => { })     // update book parametres by id = findByIdAndUpdate
+    Book.findByIdAndUpdate(bookId, req.body)     // update book parametres by id = findByIdAndUpdate
         .then(result => {
             res.json({
                 book: result
@@ -82,7 +81,7 @@ exports.updateBookById = (req, res) => {
 
 exports.deleteBookById = (req, res) => {
     const bookId = req.params.id;
-    book.findOneAndDelete(bookId)     // find book by id and delete
+    Book.findOneAndDelete(bookId)     // find book by id and delete
         .then(result => {
             res.json({
                 book: result
