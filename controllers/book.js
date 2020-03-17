@@ -23,7 +23,7 @@ const Book = require('../models/bookSchema.js');
 // }
 
 exports.getBookByAuthor = (req, res) => {
-    Book.findOne(req.author)    // find book by Author  { "author": author }
+    Book.findOne()    // find book by Author  { "author": author } req.params
         .then(book => {
             res.json({
                 book
@@ -38,7 +38,8 @@ exports.getBookByAuthor = (req, res) => {
 };
 
 exports.getBookById = (req, res) => {
-    Book.findById(req.id) // find book by id, maybe to use callbak function ?
+    const bookId = req.params.id;
+    Book.findById(bookId) // find book by id
         .then(book => {
             res.json({
                 book
