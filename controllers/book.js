@@ -23,7 +23,10 @@ const Book = require('../models/bookSchema.js');
 // }
 
 exports.getBookByAuthor = (req, res) => {
-    Book.findOne()    // find book by Author  { "author": author } req.params
+    //const bookAuthor=req.param('author');
+    const bookAuthor = req.query.author;  //req.query: directly access the parsed query string parameters
+    console.log(bookAuthor);
+    Book.find({ author: bookAuthor })    // find book by Author  { "author": author } req.params
         .then(book => {
             res.json({
                 book
@@ -38,7 +41,7 @@ exports.getBookByAuthor = (req, res) => {
 };
 
 exports.getBookById = (req, res) => {
-    const bookId = req.params.id;
+    const bookId = req.params.id; //req.params: directly access the parsed route parameters from the path
     Book.findById(bookId) // find book by id
         .then(book => {
             res.json({
