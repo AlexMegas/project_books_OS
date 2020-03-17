@@ -1,60 +1,16 @@
 const Book = require('../models/bookSchema.js');
 
 
-// exports.deleteBookById = (req, res) => {
-//     const book = new Book(req.id);
-//     book.findOneAndDelete(id)     // find book by id and delete
-//         .then(result => {
-//             res.json({
-//                 book: result
-//             });
-//         });
-// }
-
-
-// exports.upddateBookById = (req, res) => {
-//     const book = new Book(req.id);
-//     book.findOneAndUpdate({"_id": id}, (req.body)=> {})     // update book parametres by id = findByIdAndUpdate
-//         .then(result => {
-//             res.json({
-//                 book: result
-//             });
-//         });
-// }
-
-exports.getBookByAuthor = (req, res) => {
-    //const bookAuthor=req.param('author');
-    const bookAuthor = req.query.author;  //req.query: directly access the parsed query string parameters
-    console.log(bookAuthor);
-    Book.find({ author: bookAuthor })    // find book by Author  { "author": author } req.params
-        .then(book => {
+exports.addBook = (req, res) => {
+    const book = new Book(req.body);
+    book.save()     // save new book to the book store
+        .then(result => {
             res.json({
-                book
-            })
-        })
-        .catch(
-            err => {
-                console.log(err)
-                res.status(404).send(err.message)
-            }
-        );
+                book: result
+            });
+        });
 };
-
-exports.getBookById = (req, res) => {
-    const bookId = req.params.id; //req.params: directly access the parsed route parameters from the path
-    Book.findById(bookId) // find book by id
-        .then(book => {
-            res.json({
-                book
-            })
-        })
-        .catch(
-            err => {
-                console.log(err)
-                res.status(404).send(err.message)
-            }
-        );
-};
+// ------------------------------------------------------
 
 
 exports.getBooks = (req, res) => {
@@ -72,13 +28,64 @@ exports.getBooks = (req, res) => {
             }
         );
 };
+// ------------------------------------------------------
 
-exports.addBook = (req, res) => {
-    const book = new Book(req.body);
-    book.save()     // save new book to the book store
+
+exports.getBookById = (req, res) => {
+    const bookId = req.params.id; //req.params: directly access the parsed route parameters from the path
+    Book.findById(bookId) // find book by id
+        .then(book => {
+            res.json({
+                book
+            })
+        })
+        .catch(
+            err => {
+                console.log(err)
+                res.status(404).send(err.message)
+            }
+        );
+};
+// ------------------------------------------------------
+
+
+exports.getBookByAuthor = (req, res) => {
+    const bookAuthor = req.query.author;  //req.query: directly access the parsed query string parameters
+    Book.find({ author: bookAuthor })    // find book by Author
+        .then(book => {
+            res.json({
+                book
+            })
+        })
+        .catch(
+            err => {
+                console.log(err)
+                res.status(404).send(err.message)
+            }
+        );
+};
+// ------------------------------------------------------
+
+
+exports.updateBookById = (req, res) => {
+    const bookId = req.params.id;
+    console.log(bookId);
+    book.findByIdAndUpdate(bookId, reg.body(), () => { })     // update book parametres by id = findByIdAndUpdate
         .then(result => {
             res.json({
                 book: result
             });
         });
-};
+}
+// ------------------------------------------------------
+
+
+exports.deleteBookById = (req, res) => {
+    const bookId = req.params.id;
+    book.findOneAndDelete(bookId)     // find book by id and delete
+        .then(result => {
+            res.json({
+                book: result
+            });
+        });
+}

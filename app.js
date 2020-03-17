@@ -21,7 +21,7 @@ mongoose.connection.on('error', err => console.log(`MongoDB connection error ${e
 app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(expressValidator());
-app.use("/api/", route);
+app.use("/api", route);
 
 const port = 8080;
 app.listen(port, () => {
