@@ -80,9 +80,9 @@ exports.updateBookById = (req, res) => {
 
 
 exports.deleteBookById = (req, res) => {
-    const id = req.params.id;
-    console.log(id);
-    res.send('-----', id);
+    const bookId = req.params.id;
+    console.log(bookId);
+    res.send('-----', bookId);
     Book.findOneAndDelete({ // find book by id and delete
             _id: bookId
         }, function (err) {
