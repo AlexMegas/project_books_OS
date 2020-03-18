@@ -8,11 +8,12 @@ const route = require("./routes/book.js");
 
 
 mongoose.set('useUnifiedTopology', true);
+mongoose.set('useFindAndModify', false);
 
 mongoose
-  .connect("mongodb://localhost:27017/booksapp",
-    { useNewUrlParser: true }
-  )
+  .connect("mongodb://localhost:27017/booksapp", {
+    useNewUrlParser: true,
+  })
   .then(() => console.log('MongoDB is connected.'));
 
 mongoose.connection.on('error', err => console.log(`MongoDB connection error ${err.message}`));
