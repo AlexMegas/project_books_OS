@@ -12,7 +12,6 @@ mongoose
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false
-
   })
   .then(() => console.log('MongoDB is connected.'));
 

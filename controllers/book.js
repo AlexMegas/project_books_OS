@@ -13,23 +13,6 @@ exports.addBook = (req, res) => {
 // ------------------------------------------------------
 
 
-exports.getBooks = (req, res) => {
-    Book.find({}) // find all books in the book store
-        .then(book => {
-            res.json({
-                book
-            })
-        })
-        .catch(
-            err => {
-                console.log(err)
-                res.status(404).send(err.message)
-            }
-        );
-};
-// ------------------------------------------------------
-
-
 exports.getBookById = (req, res) => {
     const bookId = req.params.id; //req.params: directly access the parsed route parameters from the path
     Book.findById(bookId) // find book by id
@@ -49,21 +32,36 @@ exports.getBookById = (req, res) => {
 
 
 exports.getBookByQuery = (req, res) => {
-    const value = req.query.title; //req.query: directly access the parsed query string parameters
-    Book.find({
-        title: value
-    }) // find book by query
-        .then(book => {
-            res.json({
-                book
+    const title = req.query.title; //req.query: directly access the parsed query string parameters
+    if (title === undefined) {
+        Book.find({}) // find all books in the book store
+            .then(book => {
+                res.json({
+                    book
+                })
             })
-        })
-        .catch(
-            err => {
-                console.log(err)
-                res.status(404).send(err.message)
-            }
-        );
+            .catch(
+                err => {
+                    console.log(err)
+                    res.status(404).send(err.message)
+                }
+            );
+    } else {
+        Book.find({
+            title: title
+        }) // find book by query = title
+            .then(book => {
+                res.json({
+                    book
+                })
+            })
+            .catch(
+                err => {
+                    console.log(err)
+                    res.status(404).send(err.message)
+                }
+            );
+    }
 };
 // ------------------------------------------------------
 
