@@ -10,7 +10,7 @@ exports.addBook = (req, res) => {
             });
         });
 };
-// ------------------------------------------------------
+
 
 
 exports.getBookById = (req, res) => {
@@ -28,12 +28,12 @@ exports.getBookById = (req, res) => {
             }
         );
 };
-// ------------------------------------------------------
+
 
 
 exports.getBookByQuery = (req, res) => {
     const title = req.query.title; //req.query: directly access the parsed query string parameters
-    if (title === undefined) {
+    if (!title) {
         Book.find({}) // find all books in the book store
             .then(book => {
                 res.json({
@@ -63,23 +63,25 @@ exports.getBookByQuery = (req, res) => {
             );
     }
 };
-// ------------------------------------------------------
+
 
 
 exports.updateBookById = (req, res) => {
     const bookId = req.params.id;
-    Book.findByIdAndUpdate(bookId, req.body, (error, result) => { // update book parametres by id = findByIdAndUpdate
-        if (error) return res.send(error);
-        res.send(`Record with id:${bookId} --> updated successfully!`);
+    const promise = new Promise(function (resolve, reject) {
+        Book.findByIdAndUpdate(bookId, req.body, (error, result) => { // update book parametres by id = findByIdAndUpdate
+            if (error) reject();
+            resolve(result);
+        })
     })
-        .catch(
-            err => {
-                console.log(err)
-                res.status(404).send(err.message)
-            }
-        );
+    promise.then(res.send(`Record with id:${bookId} --> updated successfully!`));
+    promise.catch(
+        err => {
+            console.log(err)
+            res.status(404).send(err.message)
+        });
 }
-// ------------------------------------------------------
+
 
 
 exports.deleteBookById = (req, res) => {
