@@ -48,11 +48,11 @@ exports.getBookById = (req, res) => {
 // ------------------------------------------------------
 
 
-exports.getBookByAuthor = (req, res) => {
-    const bookAuthor = req.query.author; //req.query: directly access the parsed query string parameters
+exports.getBookByQuery = (req, res) => {
+    const value = req.query.title; //req.query: directly access the parsed query string parameters
     Book.find({
-        author: bookAuthor
-    }) // find book by Author
+        title: value
+    }) // find book by query
         .then(book => {
             res.json({
                 book
@@ -94,6 +94,5 @@ exports.deleteBookById = (req, res) => {
             return res.status(500).send();
         }
         res.send(`Record with id:${bookId} --> deleted from DB!`);
-        return res.status(200).send();
     });
 };
