@@ -2,6 +2,7 @@ const user = require('../models/userSchema.js');
 
 exports.signup = (req, res) => {
     console.log(req.body);
+    res.send(req.body);
     // async await
     // to be continue...
 };
