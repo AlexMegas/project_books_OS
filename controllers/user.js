@@ -25,36 +25,22 @@ exports.signup = async (req, res) => {
 
 
 exports.login = (req, res) => {
-
-    const token = randomToken(24);
-    const user = new User(req.body);
-
     User.findOne({ name: req.body.name })
-        .then(
-            bCrypt.hash(req.body.passw, 10, (err, hash) => {
-                console.log(hash)
-                if (hash === user.passw) {
-                    res.status(200).send('User logged in ;)');
-                }
-            })
-        )
-        .catch(err => console.error(err));
+        .then((user) => {
+            if (!user) {
+                res.redirect('/');
+            } else {
+                bCrypt.compare(req.body.passw, user.passw, (err, result) => {
+                    if (result) {
+                        //token ?
+                        res.status(200).send('User logged in ;)');
+                    } else {
+                        res.status(404).send('Invalid credentials :(');
+                    }
+                });
+            }
+        });
 }
-
-
-
-// exports.login = async (req, res) => {
-//     try {
-//         const user = new User(req.body);
-//         if (await User.findOne({ name: req.body.name, passw: req.body.passw })) {
-//             res.status(200).send("User logged in ;)");
-//         } else {
-//             return res.status(404).send("Name or password are incorrect :(");
-//         }
-//     } catch (err) {
-//         console.error(err);
-//     }
-// };
 
 
 exports.logout = (req, res) => {
