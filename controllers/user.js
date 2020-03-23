@@ -25,22 +25,27 @@ exports.signup = async (req, res) => {
 
 
 exports.login = (req, res) => {
-    User.findOne({ name: req.body.name })
-        .then((user) => {
-            if (!user) {
-                res.redirect('/');
-            } else {
-                bCrypt.compare(req.body.passw, user.passw, (err, result) => {
-                    if (result) {
-                        //token ?
-                        res.status(200).send('User logged in ;)');
-                    } else {
-                        res.status(404).send('Invalid credentials :(');
-                    }
-                });
-            }
-        });
-}
+    try {
+        User.findOne({ name: req.body.name })
+            .then((user) => {
+                if (user) {
+                    bCrypt.compare(req.body.passw, user.passw, (err, result) => {
+                        if (result) {
+                            //token ?
+                            res.status(200).send('User logged in ;)');
+                        } else {
+                            res.status(404).send('Invalid credentials :(');
+                        }
+                    });
+                } else {
+                    res.status(400).send('Invalid credentials :(')
+                }
+            });
+    }
+    catch (err) {
+        console.error(err);
+    }
+};
 
 
 exports.logout = (req, res) => {
