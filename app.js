@@ -4,7 +4,8 @@ const mongoose = require('mongoose');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const expressValidator = require('express-validator');
-const route = require("./routes/book.js");
+const bookRoute = require("./routes/book.js");
+const userRoute = require("./routes/user.js");
 
 
 mongoose
@@ -21,7 +22,9 @@ mongoose.connection.on('error', err => console.log(`MongoDB connection error ${e
 app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(expressValidator());
-app.use("/api", route);
+app.use("/api/books", bookRoute);
+app.use("/api/users", userRoute);
+
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
