@@ -8,6 +8,10 @@ const userSchema = new mongoose.Schema({
     passw: {
         type: String,
         required: true
+    },
+    token: {
+        type: String,
+        required: false
     }
 });
 

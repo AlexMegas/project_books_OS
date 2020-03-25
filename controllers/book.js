@@ -33,9 +33,9 @@ exports.getBookByQuery = (req, res) => {
     const title = req.query.title; //req.query: directly access the parsed query string parameters
     if (!title) {
         Book.find({}) // find all books in the book store
-            .then(book => {
+            .then(books => {
                 res.json({
-                    book
+                    books
                 })
             })
             .catch(
