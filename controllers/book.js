@@ -1,14 +1,28 @@
 const Book = require('../models/bookSchema.js');
 
-
 exports.addBook = (req, res) => {
-    const book = new Book(req.body);
-    book.save() // save new book to the book store
-        .then(result => {
-            res.json({
-                book: result
-            });
-        });
+    const {
+        author,
+        title,
+        public,
+        pages,
+        genre
+    } = req.body;
+    const book = new Book({
+        author,
+        title,
+        public,
+        pages,
+        genre,
+        owner: req.userId
+    });
+    book.save()
+        .then(book => res.json({
+            book: book
+        }))
+        .catch(err => res.status(500).json({
+            message: 'Record error'
+        }))
 };
 
 
@@ -46,8 +60,8 @@ exports.getBookByQuery = (req, res) => {
             );
     } else {
         Book.find({
-            title: title
-        }) // find book by query = title
+                title: title
+            }) // find book by query = title
             .then(book => {
                 res.json({
                     book
@@ -76,8 +90,10 @@ exports.updateBookById = (req, res) => {
 
 
 exports.deleteBookById = (req, res) => {
-    const bookId = req.params.id;// find book by id and delete
-    Book.findOneAndDelete({ _id: bookId })
+    const bookId = req.params.id; // find book by id and delete
+    Book.findOneAndDelete({
+            _id: bookId
+        })
         .then(res.send(`Record with id:${bookId} --> deleted from DB!`))
         .catch(err => {
             console.log(err);
