@@ -1,5 +1,6 @@
 const Book = require('../models/bookSchema.js');
 
+// add new book
 exports.addBook = (req, res) => {
     const {
         author,
@@ -25,10 +26,10 @@ exports.addBook = (req, res) => {
         }))
 };
 
-
+// find book by id
 exports.getBookById = (req, res) => {
     const bookId = req.params.id; //req.params: directly access the parsed route parameters from the path
-    Book.findById(bookId) // find book by id
+    Book.findById(bookId)
         .then(book => {
             res.json({
                 book
@@ -42,11 +43,12 @@ exports.getBookById = (req, res) => {
         );
 };
 
-
+// find all books in the book store
+// find book by query = title
 exports.getBookByQuery = (req, res) => {
     const title = req.query.title; //req.query: directly access the parsed query string parameters
     if (!title) {
-        Book.find({}) // find all books in the book store
+        Book.find({})
             .then(books => {
                 res.json({
                     books
@@ -61,7 +63,7 @@ exports.getBookByQuery = (req, res) => {
     } else {
         Book.find({
                 title: title
-            }) // find book by query = title
+            })
             .then(book => {
                 res.json({
                     book
@@ -80,23 +82,28 @@ exports.getBookByQuery = (req, res) => {
 exports.updateBookById = (req, res) => {
     const bookId = req.params.id;
     Book.findByIdAndUpdate(bookId, req.body)
-        .then(res.send(`Record with id:${bookId} --> updated successfully!`))
+        .then(book => {
+            res.status(200).json({
+                book // WHY? - user can see not updated book
+            })
+        })
         .catch(
             err => {
-                console.log(err)
-                res.status(404).send(err.message)
+                res.status(404).json({
+                    message: 'Server error'
+                })
             });
 };
 
 
+// find book by id and delete
 exports.deleteBookById = (req, res) => {
-    const bookId = req.params.id; // find book by id and delete
+    const bookId = req.params.id;
     Book.findOneAndDelete({
             _id: bookId
         })
-        .then(res.send(`Record with id:${bookId} --> deleted from DB!`))
-        .catch(err => {
-            console.log(err);
-            res.status(500).send();
-        })
+        .then(res.status(200).json({
+            message: 'Book deleted'
+        }))
+        .catch(err => res.status(500).send());
 }
