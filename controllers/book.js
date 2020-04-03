@@ -81,10 +81,12 @@ exports.getBookByQuery = (req, res) => {
 
 exports.updateBookById = (req, res) => {
     const bookId = req.params.id;
-    Book.findByIdAndUpdate(bookId, req.body)
+    Book.findByIdAndUpdate(bookId, req.body, {
+            new: true
+        })
         .then(book => {
             res.status(200).json({
-                book // WHY? - response is not updated book
+                book
             })
         })
         .catch(
@@ -99,9 +101,7 @@ exports.updateBookById = (req, res) => {
 // find book by id and delete
 exports.deleteBookById = (req, res) => {
     const bookId = req.params.id;
-    Book.findOneAndDelete({
-            _id: bookId
-        })
+    Book.findByIdAndDelete(bookId) //findOneAndDelete
         .then(book => {
             res.status(200).json({
                 message: `Book deleted: ${book.title}`
