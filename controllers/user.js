@@ -76,14 +76,14 @@ exports.login = (req, res) => {
 
 
 exports.logout = (req, res) => {
-    const authHeader = req.get('Authorization');
-    if (!authHeader) {
+    const token = req.headers.token;
+    if (!token) {
         return res.status(401).json({
             message: 'Token not provided!'
         })
     }
     User.findOneAndUpdate({
-            token: authHeader
+            token: token
         }, {
             token: null
         })

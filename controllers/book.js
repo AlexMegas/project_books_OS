@@ -84,7 +84,7 @@ exports.updateBookById = (req, res) => {
     Book.findByIdAndUpdate(bookId, req.body)
         .then(book => {
             res.status(200).json({
-                book // WHY? - user can see not updated book
+                book // WHY? - response is not updated book
             })
         })
         .catch(
@@ -102,8 +102,10 @@ exports.deleteBookById = (req, res) => {
     Book.findOneAndDelete({
             _id: bookId
         })
-        .then(res.status(200).json({
-            message: 'Book deleted'
-        }))
+        .then(book => {
+            res.status(200).json({
+                message: `Book deleted: ${book.title}`
+            })
+        })
         .catch(err => res.status(500).send());
 }
