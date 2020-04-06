@@ -1,6 +1,9 @@
 const mongoose = require('mongoose');
 
-const bookSchema = new mongoose.Schema({ // schema in DB MongoDB
+const ObjectId = mongoose.Schema.ObjectId;
+
+const bookSchema = new mongoose.Schema({
+    // schema in DB MongoDB
     author: {
         type: String,
         required: true
@@ -20,7 +23,12 @@ const bookSchema = new mongoose.Schema({ // schema in DB MongoDB
     genre: {
         type: String,
         required: true
+    },
+    owner: {
+        type: ObjectId,
+        required: true,
+        ref: "User"
     }
 });
 
-module.exports = mongoose.model("book", bookSchema); // in mongoDB will be saved as "books"
+module.exports = mongoose.model("book", bookSchema);
