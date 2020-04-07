@@ -4,12 +4,14 @@ const mongoose = require('mongoose');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const expressValidator = require('express-validator');
+const dotenv = require('dotenv')
 const bookRoute = require("./routes/book.js");
 const userRoute = require("./routes/user.js");
 
+dotenv.config();
 
 mongoose
-  .connect("mongodb://localhost:27017/booksapp", {
+  .connect(process.env.MONGODB_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false
@@ -18,13 +20,11 @@ mongoose
 
 mongoose.connection.on('error', err => console.log(`MongoDB connection error ${err.message}`));
 
-
 app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(expressValidator());
 app.use("/api/books", bookRoute);
 app.use("/api/users", userRoute);
-
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {

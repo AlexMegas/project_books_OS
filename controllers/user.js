@@ -1,7 +1,6 @@
 const User = require('../models/userSchema.js');
-const randomToken = require('random-token')
-    .create('abcdefghijklmnopqrstuvwxzyABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789');
 const bCrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 
 exports.signup = (req, res) => {
@@ -50,6 +49,7 @@ exports.login = (req, res) => {
                     message: 'Invalid credentials'
                 });
             }
+            getUser = user;
             return bCrypt.compare(passw, user.passw);
         })
         .then((result) => {
@@ -58,7 +58,14 @@ exports.login = (req, res) => {
                     message: 'Invalid credentials'
                 });
             }
-            const token = randomToken(24);
+            const token = jwt.sign({
+                    id: getUser._id,
+                    name,
+                    passw
+                },
+                process.env.JWT_KEY, {
+                    expiresIn: "1h"
+                });
             return User.findOneAndUpdate({
                 name
             }, {

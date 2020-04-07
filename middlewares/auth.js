@@ -1,35 +1,24 @@
-const User = require('../models/userSchema.js');
 const Book = require('../models/bookSchema.js');
+const jwt = require('jsonwebtoken');
 
 
 const checkToken = (req, res, next) => {
-    const token = req.headers.token;
-    if (!token) {
-        return res.status(401).json({
-            message: 'Token not provided!'
-        })
+    try {
+        const token = req.headers.token.split(" ")[1];
+        jwt.verify(token, process.env.JWT_KEY);
+        req.userId = user._id;
+        return next();
+    } catch (error) {
+        res.status(401).json({
+            message: 'Authentication failed!'
+        });
     }
-    User.findOne({
-            token: token
-        })
-        .then((user) => {
-            if (!user) {
-                return res.status(404).json({
-                    message: 'Invalid token!'
-                })
-            }
-            req.userId = user._id;
-            return next();
-        })
-        .catch(err => res.status(500).json({
-            message: 'Server error'
-        }));
 };
 
 
 const checkIfOwner = (req, res, next) => {
     const bookId = req.params.id;
-    const userId = req.userId
+    const userId = req.userId;
     Book.findById(bookId)
         .then((book) => {
             if (!book) {
