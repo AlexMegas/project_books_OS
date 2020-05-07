@@ -7,6 +7,7 @@ const expressValidator = require('express-validator');
 const dotenv = require('dotenv')
 const bookRoute = require("./routes/book.js");
 const userRoute = require("./routes/user.js");
+const cors = require('cors');
 
 dotenv.config();
 
@@ -17,9 +18,9 @@ mongoose
     useFindAndModify: false
   })
   .then(() => console.log('MongoDB is connected.'));
-
 mongoose.connection.on('error', err => console.log(`MongoDB connection error ${err.message}`));
 
+app.use(cors())
 app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(expressValidator());

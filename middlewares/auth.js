@@ -4,7 +4,10 @@ const jwt = require('jsonwebtoken');
 
 const checkToken = (req, res, next) => {
     try {
-        const token = req.headers.token.split(" ")[1];
+        console.log(req.headers.token);
+        // const token = req.headers.token.split(" ")[1];
+        const token = req.headers.token;
+        // console.log(token);
         jwt.verify(token, process.env.JWT_KEY);
         req.userId = user._id;
         return next();

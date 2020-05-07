@@ -46,8 +46,8 @@ exports.getBookById = (req, res) => {
 // find all books in the book store
 // find book by query = title
 exports.getBookByQuery = (req, res) => {
-    const title = req.query.title; //req.query: directly access the parsed query string parameters
-    if (!title) {
+    const author = req.query.author; //req.query: directly access the parsed query string parameters
+    if (!author) {
         Book.find({})
             .then(books => {
                 res.json({
@@ -62,7 +62,7 @@ exports.getBookByQuery = (req, res) => {
             );
     } else {
         Book.find({
-                title: title
+                author: author
             })
             .then(book => {
                 res.json({

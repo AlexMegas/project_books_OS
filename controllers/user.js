@@ -59,9 +59,7 @@ exports.login = (req, res) => {
                 });
             }
             const token = jwt.sign({
-                    id: getUser._id,
-                    name,
-                    passw
+                    id: getUser._id
                 },
                 process.env.JWT_KEY, {
                     expiresIn: "1h"
