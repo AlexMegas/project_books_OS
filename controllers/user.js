@@ -31,7 +31,7 @@ exports.signup = (req, res) => {
             user: user.name,
             message: 'registered'
         }))
-        .catch((err) => console.error(err))
+        .catch((err) => console.log(err))
 };
 
 
@@ -62,8 +62,9 @@ exports.login = (req, res) => {
                     id: getUser._id
                 },
                 process.env.JWT_KEY, {
-                    expiresIn: "1h"
-                });
+                    expiresIn: "6h"
+                }
+            );
             return User.findOneAndUpdate({
                 name
             }, {
@@ -76,7 +77,7 @@ exports.login = (req, res) => {
             message: 'User logged in',
             token: user.token
         }))
-        .catch((err) => console.error(err))
+        .catch((err) => console.log(err))
 };
 
 
@@ -102,5 +103,5 @@ exports.logout = (req, res) => {
                 message: 'User logged out.'
             })
         })
-        .catch((err) => console.error(err))
+        .catch((err) => console.log(err))
 }

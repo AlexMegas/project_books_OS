@@ -4,12 +4,10 @@ const jwt = require('jsonwebtoken');
 
 const checkToken = (req, res, next) => {
     try {
-        console.log(req.headers.token);
-        // const token = req.headers.token.split(" ")[1];
         const token = req.headers.token;
-        // console.log(token);
-        jwt.verify(token, process.env.JWT_KEY);
-        req.userId = user._id;
+        let cutToken = token.substr(1, token.length - 2);
+        let tkn = jwt.verify(cutToken, process.env.JWT_KEY);
+        req.userId = tkn.id;
         return next();
     } catch (error) {
         res.status(401).json({
