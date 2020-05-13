@@ -12,7 +12,7 @@ const bookSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    public: {
+    publik: {
         type: Date,
         required: true
     },

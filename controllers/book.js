@@ -5,14 +5,14 @@ exports.addBook = (req, res) => {
     const {
         author,
         title,
-        public,
+        publik,
         pages,
         genre
     } = req.body;
     const book = new Book({
         author,
         title,
-        public,
+        publik,
         pages,
         genre,
         owner: req.userId

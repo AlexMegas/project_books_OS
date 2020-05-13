@@ -82,14 +82,15 @@ exports.login = (req, res) => {
 
 
 exports.logout = (req, res) => {
-    const token = req.headers.token;
-    if (!token) {
+    let token = req.headers.token;
+    let cutToken = token.substr(1, token.length - 2);
+    if (!cutToken) {
         return res.status(401).json({
             message: 'Token not provided!'
         })
     }
     User.findOneAndUpdate({
-            token: token
+            token: cutToken
         }, {
             token: null
         })
