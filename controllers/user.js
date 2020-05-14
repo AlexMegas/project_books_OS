@@ -75,6 +75,7 @@ exports.login = (req, res) => {
         })
         .then((user) => res.status(200).json({
             message: 'User logged in',
+            userId: user._id,
             token: user.token
         }))
         .catch((err) => console.log(err))
