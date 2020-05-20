@@ -1,7 +1,6 @@
 const User = require('../models/userSchema.js');
-const randomToken = require('random-token')
-    .create('abcdefghijklmnopqrstuvwxzyABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789');
 const bCrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 
 exports.signup = (req, res) => {
@@ -32,7 +31,7 @@ exports.signup = (req, res) => {
             user: user.name,
             message: 'registered'
         }))
-        .catch((err) => console.error(err))
+        .catch((err) => console.log(err))
 };
 
 
@@ -50,6 +49,7 @@ exports.login = (req, res) => {
                     message: 'Invalid credentials'
                 });
             }
+            getUser = user;
             return bCrypt.compare(passw, user.passw);
         })
         .then((result) => {
@@ -58,7 +58,13 @@ exports.login = (req, res) => {
                     message: 'Invalid credentials'
                 });
             }
-            const token = randomToken(24);
+            const token = jwt.sign({
+                    id: getUser._id
+                },
+                process.env.JWT_KEY, {
+                    expiresIn: "6h"
+                }
+            );
             return User.findOneAndUpdate({
                 name
             }, {
@@ -69,21 +75,23 @@ exports.login = (req, res) => {
         })
         .then((user) => res.status(200).json({
             message: 'User logged in',
+            userId: user._id,
             token: user.token
         }))
-        .catch((err) => console.error(err))
+        .catch((err) => console.log(err))
 };
 
 
 exports.logout = (req, res) => {
-    const token = req.headers.token;
-    if (!token) {
+    let token = req.headers.token;
+    let cutToken = token.substr(1, token.length - 2);
+    if (!cutToken) {
         return res.status(401).json({
             message: 'Token not provided!'
         })
     }
     User.findOneAndUpdate({
-            token: token
+            token: cutToken
         }, {
             token: null
         })
@@ -97,5 +105,5 @@ exports.logout = (req, res) => {
                 message: 'User logged out.'
             })
         })
-        .catch((err) => console.error(err))
+        .catch((err) => console.log(err))
 }
